@@ -1,0 +1,63 @@
+.data
+	.comm  a,8
+	.comm b,8
+	.comm sum,8
+	.comm min,8
+	.comm max,8
+.text
+format1:
+	.string "a=%ld"
+format2:
+	.string "b=%ld"
+format3:
+	.string "max=%ld\n"
+format4:
+	.string "min=%ld\n"
+format5:
+	.string "avg=%ld\n"
+.globl main
+main:
+	pushq %rbp
+	movq %rsp, %rbp
+	
+	movq $format1, %rdi
+	movq $a, %rsi
+	call scanf
+
+	movq $format2, %rdi
+	movq $b, %rsi
+	call scanf
+
+	movq a, %rcx
+	movq b, %rdx
+	movq %rcx, sum
+	addq %rdx, sum
+	cmpq %rcx, %rdx
+	jle ifnot
+	movq %rcx, max
+	movq %rdx, min
+
+
+
+
+ifnot:
+	movq %rdx, max
+	movq %rcx, min
+afterif:
+	movq $format3, %rdi
+	movq max, %rsi
+	call printf
+
+	movq $format4, %rdi
+	movq min, %rsi
+	call printf
+
+	movq sum,%rax
+	movq $2, sum
+	idivq sum
+	movq $format5, %rdi
+	movq %rax, %rsi
+	call printf
+	
+	leave
+	ret
